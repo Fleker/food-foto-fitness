@@ -6,8 +6,21 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script>
+    // https://medium.com/angular-in-depth/google-apis-with-angular-214fadb8fbc5
+    if (global === undefined) {
+      var global = window;
+    }
+    var process = process || {
+      env: { DEBUG: undefined },
+      version: ''
+    };
+    function gisLoaded() { console.debug('gisLoaded') }
+  </script>
 </head>
 <body>
   <app-root></app-root>
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
 </body>
 </html>

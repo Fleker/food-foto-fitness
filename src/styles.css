@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+  background-color: #333;
+  color: white;
+}
+
+dialog {
+  background-color: #555;
+  color: white;
+}
