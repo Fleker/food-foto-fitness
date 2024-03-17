@@ -130,6 +130,13 @@ export interface NutritionSource {
   }[]
 }
 
+enum State {
+  GetImage = 1,
+  GetUsda = 2,
+  AdjustData = 3,
+  Submit = 4,
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -137,6 +144,7 @@ export interface NutritionSource {
 })
 export class AppComponent implements AfterViewInit {
   @ViewChild('foodpicker') foodpicker?: ElementRef
+  @ViewChild('file') file?: ElementRef
   title = 'food-fotos';
   processing = false
   journalImage = ''
@@ -147,6 +155,7 @@ export class AppComponent implements AfterViewInit {
   journalEntry?: NutritionSource
   adjustFoodIndex = 0
   adjustFoodSize = 0
+  state = State.GetImage
 
   constructor(
     private readonly gemini: GeminiService,
@@ -166,8 +175,13 @@ export class AppComponent implements AfterViewInit {
     return this.gapi.loggedIn
   }
 
+  selectPhoto() {
+    this.file!.nativeElement.click()
+  }
+
   async classify(event: any) {
     this.processing = true
+    this.state = State.GetUsda
     const reader = new FileReader();
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0]
@@ -179,6 +193,7 @@ export class AppComponent implements AfterViewInit {
         this.journalPlate = plate
         const nutrients = await this.getAllNutrients(plate.map(p => p.foodKey))
         this.journalUsda = nutrients
+        this.state = State.AdjustData
         this.processing = false
         this.journalTime = (() => {
           const h = new Date().getHours()
@@ -243,7 +258,7 @@ export class AppComponent implements AfterViewInit {
     return json
   }
 
-  convertFdaToFit(foods: FdaNutrtionData[], plate: Plate, meal: Meal) {
+  convertUsdaToFit(foods: FdaNutrtionData[], plate: Plate, meal: Meal) {
     console.log(plate)
     const now = Date.now()
     const datum: NutritionSource = {
@@ -292,7 +307,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   generatePayload(nutrients: FdaNutrtionData[], plate: Plate, meal: Meal) {
-    this.journalEntry = this.convertFdaToFit(nutrients, plate, Meal.LUNCH)
+    this.journalEntry = this.convertUsdaToFit(nutrients, plate, Meal.LUNCH)
     this.journalCalories = (() => {
       let c = 0
       this.journalEntry!.point[0].value[0].mapVal.forEach(v => {
@@ -333,5 +348,6 @@ export class AppComponent implements AfterViewInit {
     this.journalImage = ''
     this.journalUsda = []
     this.processing = false
+    this.state = State.GetImage
   }
 }

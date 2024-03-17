@@ -13,14 +13,30 @@ button.login {
   padding-right: 12px;
 }
 
-img {
-  float: right;
+input[type='file'] {
+  display: none;
 }
 
-@media (max-width: 600px) {
-  img {
-    display: none;
-  }
+img.photograph {
+  opacity: 1;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+img.processing {
+  animation: churn 1s linear infinite;
+}
+
+mat-spinner {
+  position: absolute;
+  margin-top: 100px;
+  margin-left: calc(50% - 50px);
+  z-index: 5;
+}
+
+li.plateItem {
+  text-decoration: dotted;
 }
 
 li strong {
@@ -31,4 +47,45 @@ small {
   position: fixed;
   bottom: 16px;
   left: 16px;
+}
+
+.mat-mdc-select {
+  color: white;
+  font-weight: bold;
+  border-bottom: solid 1px;
+  width: 100px;
+}
+
+.mat-mdc-option {
+  color: white;
+  background-color: #555;
+  font-family: sans-serif;
+}
+
+.mat-mdc-option.mat-mdc-option-active.mdc-list-item {
+  background-color: black;
+}
+
+.journalEntry {
+  margin-left: 100px;
+}
+
+li.selected {
+  font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  .journalEntry {
+    margin-left: 0px;
+  }
+}
+
+@keyframes churn {
+  0% {
+    filter: brightness(1);
+  }
+
+  50% {
+    filter: brightness(1.5);
+  }
 }

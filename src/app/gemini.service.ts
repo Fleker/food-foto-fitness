@@ -83,4 +83,20 @@ export class GeminiService {
       }
     }).filter(x => x) as Plate
   }
+
+  async runFateClassifier(image: string): Promise<Plate> {
+    return new Promise((res) => {
+      setTimeout(() => {
+        res([{
+          foodKey: 'korean chicken wings',
+          portion: 'pieces',
+          portionNum: 10
+        }, {
+          foodKey: 'corn salad',
+          portion: 'cup',
+          portionNum: 1,
+        }])
+      }, 1000)
+    })
+  }
 }
