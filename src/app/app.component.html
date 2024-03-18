@@ -1,44 +1,114 @@
-<button *ngIf="!isLoggedIn" class="login" (click)="login()">Login to Google</button>
 
-<div *ngIf="isLoggedIn">
-  <h1>Select a photo to begin the process</h1>
-  <input type="file" (change)="classify($event)" accept="image/*" />
+<div *ngIf="state === 1">
+  <h1>Pick a photo</h1>
+  <button (click)="selectPhoto()" mat-raised-button>
+    Select
+  </button>
+  <input type="file" (change)="classify($event)" accept="image/*" #file />
+</div>
 
-  <img src="{{journalImage}}"/>
-  <h2 *ngIf="processing">Processing...</h2>
-  <div *ngIf="journalPlate?.length">
-    <h2>Journal Entry</h2>
-    <select [value]="journalTime">
-      <option value="2">Breakfast</option>
-      <option value="3">Lunch</option>
-      <option value="4">Dinner</option>
-      <option value="5">Snack</option>
-    </select>
-    <br>
-    <strong>{{journalCalories}} Calories</strong>
-    <br>
-    <ul>
-      <li *ngFor="let p of journalPlate; index as i" (click)="adjustFood(i)">
-        {{p.portionNum}} {{p.portion}}
-        &emsp;
-        <strong>{{p.foodKey}}</strong>
-      </li>
-    </ul>
-    <button (click)="addJournal()" [disabled]="processing">
-      Bon Apetit!
-    </button>
+<div *ngIf="state === 2 || state === 3">
+  <div *ngIf="processing">
+    <mat-spinner [diameter]="100"></mat-spinner>
+  </div>
+  <img *ngIf="!journalPlate?.length" src="{{journalImage}}" class="photograph" [class.processing]="processing"/>
+  <div *ngIf="journalPlate?.length" class="journalEntry">
+    <table>
+      <tr>
+        <td class="vat">
+          <h2>Journal Entry</h2>
+          <select [(ngModel)]="journalTime">
+            <option value="2">Breakfast</option>
+            <option value="3">Lunch</option>
+            <option value="4">Dinner</option>
+            <option value="5">Snack</option>
+          </select>
+          <br>
+          <strong>
+            {{journalCalories}} Calories
+            <button mat-icon-button (click)="showAllNutrients()">
+              <mat-icon fontIcon="info"></mat-icon>
+            </button>
+          </strong>
+          <br>
+          <table>
+            <tr *ngFor="let p of journalPlate; index as i">
+              <td>
+                <li  class="plateItem" (click)="adjustFood(i)">
+                  {{p.portionNum}} {{p.portion}}
+                  &emsp;
+                  <strong>{{p.foodKey}}</strong>
+                </li>
+              </td>
+              <td>
+                <button mat-icon-button (click)="adjustFood(i)">
+                  <mat-icon fontIcon="edit"></mat-icon>
+                </button>
+              </td>
+            </tr>
+          </table>
+          <button mat-raised-button *ngIf="!isLoggedIn && state === 3" (click)="login()">
+            <mat-icon fontIcon="fitness_center"></mat-icon>
+            Connect to Google Fit
+          </button>
+          <button *ngIf="isLoggedIn" mat-raised-button (click)="addJournal()">
+            <mat-icon fontIcon="cloud_upload"></mat-icon>
+            Bon Apetit
+          </button>
+        </td>
+        <td>
+          <img src="{{journalImage}}" class="floater" />
+        </td>
+      </tr>
+    </table>
   </div>
 </div>
 
+<button mat-fab (click)="hydrate()" [class.needlogin]="!isLoggedIn" [disabled]="processing">
+  <mat-icon fontIcon="local_drink"></mat-icon>
+  +1
+</button>
+
 <dialog #foodpicker>
   <h1>Change food entry</h1>
-  <input type="number" min="1" [(ngModel)]="adjustFoodSize" /><br>
-  <button (click)="dismiss()">Close</button>
+  <input type="number" min="1" [(ngModel)]="adjustFoodSize" (click)="updateAdjustFoodSize()" />
+  &emsp;
+  <input type="search" [(ngModel)]="adjustFoodQuery" (blur)="updateAdjustFoodQuery()" />
+  <button mat-icon-button (click)="updateAdjustFoodQuery()">
+    <mat-icon fontIcon="search"></mat-icon>
+  </button>
+  <br>
   <ul *ngIf="journalUsda.length">
-    <li *ngFor="let f of journalUsda[adjustFoodIndex].foods; index as i" (click)="updateAdjustFood(f, i)">
+    <li *ngFor="let f of journalUsda[adjustFoodIndex].foods; index as i" [class.selected]="i === 0" (click)="updateAdjustFood(f, i)">
       {{f.description}}
     </li>
   </ul>
+  <br><br>
+  <button mat-raised-button (click)="dismiss()">Close</button>
 </dialog>
 
-<small>v2024.03.14</small>
+<dialog #nutritionlabel>
+  <h1>Nutrition Label</h1>
+  <div *ngFor="let point of journalEntry?.point">
+    <h3>{{point.value[2].strVal}}</h3>
+    <table>
+      <tr *ngFor="let val of point.value[0].mapVal">
+        <td>
+          <strong>
+            <small>
+              {{val.key}}:
+            </small>
+          </strong>
+        </td>
+        <td>
+          <small>
+            {{val.value.fpVal}} {{nutrientUnits[val.key]}}
+          </small>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <button mat-raised-button (click)="dismiss()">Close</button>
+</dialog>
+
+<small class="version">v2024.03.18</small>

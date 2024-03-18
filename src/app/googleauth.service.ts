@@ -8,6 +8,9 @@ const CLIENT_ID = '763294835062-cb2b58s7agca924hhpfm241n1p5ec0vj.apps.googleuser
 declare var gapi: any;
 declare var google: any;
 
+type DataStreamName = 'HydrationSource' | 'NutritionSource'
+type DataTypeName = 'com.google.hydration' | 'com.google.nutrition'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -69,7 +72,7 @@ export class GoogleauthService {
     this.loggedIn = false
   }
 
-  async generateFitJournalEntry() {
+  async generateFitJournalEntry(dataStreamName: DataStreamName, dataType: DataTypeName) {
     const accessToken = this.xs
     gapi.client.setToken({access_token: accessToken})
     await gapi.client.init({
@@ -80,20 +83,28 @@ export class GoogleauthService {
       ]
     })
     console.log(gapi.client)
+    const req: any = {
+      userId: 'me',
+      dataStreamName,
+      type: 'raw',
+      application: {
+        detailsUrl: 'http://example.com',
+        name: 'Food Fotos for Fitness',
+        version: '2024.03.13'
+      },
+      dataType: {
+        name: dataType,
+      }
+    }
+    if (dataStreamName === 'HydrationSource') {
+      req.dataType['field'] = [{
+        name: 'volume',
+        format: 'floatPoint',
+        optional: false,
+      }]
+    }
     try {
-      const res = await gapi.client.fitness.users.dataSources.create({
-        userId: 'me',
-        dataStreamName: 'NutritionSource',
-        type: 'raw',
-        application: {
-          detailsUrl: 'http://example.com',
-          name: 'Food Fotos for Fitness',
-          version: '2024.03.13'
-        },
-        dataType: {
-          name: 'com.google.nutrition',
-        }
-      })
+      const res = await gapi.client.fitness.users.dataSources.create(req)
       console.debug(res)
       return res
     } catch (e: any) {
@@ -124,11 +135,64 @@ export class GoogleauthService {
     //   datasetId: Date.now().toString(),
     //   userId: 'me',
     //   dataSourceId: journalId,
+    //   dataStreamId: journalId,
     // })
     const res = await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${journalId}/datasets/${Date.now().toString()}`, {
       body: JSON.stringify({
         ...data,
         dataSourceId: journalId,
+      }),
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.xs}`
+      }
+    })
+    const resData = await res.json()
+    console.debug(resData)
+  }
+
+  async patchHydrationEntry(journalId: string) {
+    const accessToken = this.xs
+    gapi.client.setToken({access_token: accessToken})
+    await gapi.client.init({
+      clientId: CLIENT_ID,
+      discoveryDocs: [
+        'https://discovery.googleapis.com/$discovery/rest',
+        'https://www.googleapis.com/discovery/v1/apis/fitness/v1/rest',
+      ]
+    })
+    console.log(gapi.client)
+    const now = Date.now()
+    // const res = await gapi.client.fitness.users.dataSources.datasets.patch({
+    //   minStartTimeNs: now * 1_000_000 - 1000,
+    //   maxEndTimeNs: now * 1_000_000 + 1000,
+    //   dataSourceId: journalId,
+    //   point: [{
+    //     startTimeNanos: now * 1_000_000 - 100,
+    //     endTimeNanos: now * 1_000_000 + 100,
+    //     dataTypeName: 'com.google.hydration',
+    //     value: [{
+    //       fpVal: 0.33
+    //     }]
+    //   }],
+    //   datasetId: Date.now().toString(),
+    //   userId: 'me',
+    //   dataStreamId: journalId,
+    // })
+    const res = await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${journalId}/datasets/${Date.now().toString()}`, {
+      body: JSON.stringify({
+        minStartTimeNs: now * 1_000_000 - 1000,
+        maxEndTimeNs: now * 1_000_000 + 1000,
+        dataSourceId: journalId,
+        point: [{
+          startTimeNanos: now * 1_000_000 - 100,
+          endTimeNanos: now * 1_000_000 + 100,
+          dataTypeName: 'com.google.hydration',
+          value: [{
+            fpVal: 0.33
+          }]
+        }],
       }),
       method: 'PATCH',
       headers: {

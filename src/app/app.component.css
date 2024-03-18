@@ -13,22 +13,128 @@ button.login {
   padding-right: 12px;
 }
 
-img {
-  float: right;
+input[type='file'] {
+  display: none;
 }
 
-@media (max-width: 600px) {
-  img {
-    display: none;
-  }
+td {
+  margin-right: 32px;
+}
+
+td.vat {
+  vertical-align: top;
+}
+
+select {
+  background-color: black;
+  color: white;
+  font-size: 12pt;
+}
+
+input {
+  background: black;
+  color: white;
+  font-size: 12pt;
+}
+
+input[type="number"] {
+  width: 6em;
+}
+
+img.photograph {
+  /* position: fixed; */
+  /* width: 100vw; */
+  /* opacity: 0.6; */
+  /* filter: blur(6px); */
+  opacity: 1;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  /* top: 0;
+  left: 0; */
+}
+
+img.processing {
+  animation: churn 1s linear infinite;
+}
+
+mat-spinner {
+  position: absolute;
+  margin-top: 100px;
+  margin-left: calc(50% - 50px);
+  z-index: 5;
+}
+
+li.plateItem {
+  text-decoration: dotted;
 }
 
 li strong {
   cursor: pointer;
 }
 
-small {
+small.version {
   position: fixed;
   bottom: 16px;
   left: 16px;
+}
+
+.mat-mdc-select {
+  color: white;
+  font-weight: bold;
+  border-bottom: solid 1px;
+  width: 100px;
+}
+
+.mat-mdc-option {
+  color: white;
+  background-color: #555;
+  font-family: sans-serif;
+}
+
+.mat-mdc-option.mat-mdc-option-active.mdc-list-item {
+  background-color: black;
+}
+
+.journalEntry {
+  padding-left: 100px;
+  background: rgba(0, 0, 0, 0.5);
+  padding-top: 16px;
+  padding-bottom: 48px;
+  position: relative;
+}
+
+li.selected {
+  font-weight: bold;
+}
+
+[mat-fab] {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+}
+
+.needlogin {
+  background-color: #777;
+  border: solid 1px white;
+}
+
+@media (max-width: 600px) {
+  .journalEntry {
+    padding-left: 0px;
+  }
+
+  img.floater {
+    display: none;
+  }
+}
+
+@keyframes churn {
+  0% {
+    filter: brightness(1);
+  }
+
+  50% {
+    filter: brightness(1.5);
+  }
 }
