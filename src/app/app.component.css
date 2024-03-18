@@ -17,11 +17,41 @@ input[type='file'] {
   display: none;
 }
 
+td {
+  margin-right: 32px;
+}
+
+td.vat {
+  vertical-align: top;
+}
+
+select {
+  background-color: black;
+  color: white;
+  font-size: 12pt;
+}
+
+input {
+  background: black;
+  color: white;
+  font-size: 12pt;
+}
+
+input[type="number"] {
+  width: 6em;
+}
+
 img.photograph {
+  /* position: fixed; */
+  /* width: 100vw; */
+  /* opacity: 0.6; */
+  /* filter: blur(6px); */
   opacity: 1;
   margin-left: auto;
   margin-right: auto;
   display: block;
+  /* top: 0;
+  left: 0; */
 }
 
 img.processing {
@@ -43,7 +73,7 @@ li strong {
   cursor: pointer;
 }
 
-small {
+small.version {
   position: fixed;
   bottom: 16px;
   left: 16px;
@@ -67,16 +97,35 @@ small {
 }
 
 .journalEntry {
-  margin-left: 100px;
+  padding-left: 100px;
+  background: rgba(0, 0, 0, 0.5);
+  padding-top: 16px;
+  padding-bottom: 48px;
+  position: relative;
 }
 
 li.selected {
   font-weight: bold;
 }
 
+[mat-fab] {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+}
+
+.needlogin {
+  background-color: #777;
+  border: solid 1px white;
+}
+
 @media (max-width: 600px) {
   .journalEntry {
-    margin-left: 0px;
+    padding-left: 0px;
+  }
+
+  img.floater {
+    display: none;
   }
 }
 

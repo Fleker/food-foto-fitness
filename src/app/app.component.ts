@@ -144,6 +144,7 @@ enum State {
 })
 export class AppComponent implements AfterViewInit {
   @ViewChild('foodpicker') foodpicker?: ElementRef
+  @ViewChild('nutritionlabel') nutritionlabel?: ElementRef
   @ViewChild('file') file?: ElementRef
   title = 'food-fotos';
   processing = false
@@ -154,8 +155,25 @@ export class AppComponent implements AfterViewInit {
   journalUsda: FdaNutrtionData[] = []
   journalEntry?: NutritionSource
   adjustFoodIndex = 0
+  adjustFoodQuery = ''
   adjustFoodSize = 0
   state = State.GetImage
+  nutrientUnits: Record<Nutrient, string> = {
+    "calories": "Cal",
+    "cholesterol": "mg",
+    "dietary_fiber": "g",
+    "potassium": "mg",
+    "protein": "g",
+    "sodium": "mg",
+    "sugar": "g",
+    "carbs.total": "g",
+    "fat.total": "g",
+    "fat.saturated": "g",
+    "fat.monounsaturated": "g",
+    "fat.polyunsaturated": "g",
+    "fat.trans": "g",
+    "fat.unsaturated": "g",
+  }
 
   constructor(
     private readonly gemini: GeminiService,
@@ -189,7 +207,7 @@ export class AppComponent implements AfterViewInit {
       reader.onload = async (event: any) => {
         this.journalImage = event.target.result
         const base64Data = event.target.result.split(',')[1]; // Remove the "data:..." prefix
-        const plate = await this.gemini.runClassifier(base64Data)
+        const plate = await this.gemini.runFateClassifier(base64Data)
         this.journalPlate = plate
         const nutrients = await this.getAllNutrients(plate.map(p => p.foodKey))
         this.journalUsda = nutrients
@@ -251,7 +269,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   async getNutrient(food: string): Promise<FdaNutrtionData> {
-    const endpoint = `https://api.nal.usda.gov/fdc/v1/foods/search?query=${encodeURIComponent(food)}&dataType=Survey%20%28FNDDS%29&pageSize=25&sortBy=dataType.keyword&sortOrder=asc&api_key=${USDA_KEY}`
+    const endpoint = `https://api.nal.usda.gov/fdc/v1/foods/search?query=${encodeURIComponent(food)}&dataType=Survey%20%28FNDDS%29&pageSize=10&sortBy=dataType.keyword&sortOrder=asc&api_key=${USDA_KEY}`
     const res = await fetch(endpoint)
     const json = await res.json() as FdaNutrtionData
     console.debug(json)
@@ -322,6 +340,7 @@ export class AppComponent implements AfterViewInit {
   adjustFood(i: number) {
     this.adjustFoodSize = this.journalPlate![i].portionNum
     this.adjustFoodIndex = i
+    this.adjustFoodQuery = this.journalPlate![i].foodKey
     this.foodpicker!.nativeElement.showModal()
   }
 
@@ -333,13 +352,45 @@ export class AppComponent implements AfterViewInit {
     this.generatePayload(this.journalUsda, this.journalPlate!, this.journalTime)
   }
 
+  updateAdjustFoodQuery() {
+    window.requestAnimationFrame(async () => {
+      console.log(this.adjustFoodQuery, this.adjustFoodSize, this.adjustFoodIndex)
+      this.journalPlate![this.adjustFoodIndex].foodKey = this.adjustFoodQuery
+      this.journalUsda[this.adjustFoodIndex].foods = []
+      const res = await this.getNutrient(this.adjustFoodQuery)
+      this.journalUsda[this.adjustFoodIndex] = res
+      this.generatePayload(this.journalUsda, this.journalPlate!, this.journalTime)
+    })
+  }
+
+  updateAdjustFoodSize() {
+    this.journalPlate![this.adjustFoodIndex].portionNum = this.adjustFoodSize
+    this.generatePayload(this.journalUsda, this.journalPlate!, this.journalTime)
+  }
+
   dismiss() {
     this.foodpicker?.nativeElement.close()
+    this.nutritionlabel?.nativeElement.close()
+  }
+
+  async hydrate() {
+    if (!this.isLoggedIn) {
+      return this.gapi.signin()
+    }
+    this.processing = true
+    const {dataStreamId} = await this.gapi.generateFitJournalEntry('HydrationSource', 'com.google.hydration')
+    await this.gapi.patchHydrationEntry(dataStreamId)
+    this.processing = false
+    alert('Checked in 1 cup of water!')
+  }
+
+  showAllNutrients() {
+    this.nutritionlabel!.nativeElement!.showModal()
   }
 
   async addJournal() {
     this.processing = true
-    const {dataStreamId} = await this.gapi.generateFitJournalEntry()
+    const {dataStreamId} = await this.gapi.generateFitJournalEntry('NutritionSource', 'com.google.nutrition')
     console.log(`Got dataStreamId ${dataStreamId}`)
     await this.gapi.patchFitJournalEntry(dataStreamId, this.journalEntry!)
     // Clear
