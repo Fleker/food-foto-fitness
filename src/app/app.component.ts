@@ -207,7 +207,7 @@ export class AppComponent implements AfterViewInit {
       reader.onload = async (event: any) => {
         this.journalImage = event.target.result
         const base64Data = event.target.result.split(',')[1]; // Remove the "data:..." prefix
-        const plate = await this.gemini.runFateClassifier(base64Data)
+        const plate = await this.gemini.runClassifier(base64Data)
         this.journalPlate = plate
         const nutrients = await this.getAllNutrients(plate.map(p => p.foodKey))
         this.journalUsda = nutrients
