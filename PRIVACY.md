@@ -1,24 +1,43 @@
-**Here's a short privacy policy you can use for your mobile app:**
-
 **Privacy Policy**
 
-We respect your privacy and are committed to protecting your personal information. This Privacy Policy outlines how we collect, use, and protect your data when you use our mobile app.
+**Effective Date:** 2025-01-01
 
-**Data Collection**
-We may collect certain personal information from you, such as your name, email address, and device information, when you use our app.
+This Privacy Policy explains how Photo Meals ("we," "us," or "our") collects, uses, and shares information about you when you use our mobile application (the "App"). 
 
-**Data Usage**
-We use your information to:
-* Provide and improve our app
-* Communicate with you about our app or services
+**1. Information We Collect**
 
-**Data Sharing**
-We will not share your personal information with third parties without your explicit consent, except as required by law.
+* **Information You Provide:** 
+    * We collect information you voluntarily provide to us, such as:
+        * Health data you choose to share with the App through Health Connect. This may include information like nutritional and hydration data. 
+    * We only collect health data that you explicitly grant the App permission to access through Health Connect. 
+* **Information Automatically Collected:** 
+    * When you use the App, we may automatically collect certain information about your device and usage, such as:
+        * Your device's operating system and version
+        * Information about your usage of the App (e.g., features used, time spent in the App)
+    * This information is never shared
 
-**Your Rights**
-You have the right to access, correct, or delete your personal information. If you have any questions or concerns, please contact us at [your email address].
+**2. How We Use Your Information**
 
-**Changes to This Policy**
-We may update this Privacy Policy from time to time. We will notify you of any significant changes.
+We use the information we collect for the following purposes:
 
-By using our app, you agree to this Privacy Policy.
+* **To provide and improve the App:** We use the collected information to:
+    * Provide and maintain the functionality of the App.
+    * Improve the App's performance and user experience.
+    * Develop new features and functionalities.
+
+**3. Data Sharing**
+
+* **Health Connect:** We share your health data with Health Connect only with your explicit consent and after you have granted the necessary permissions within the Health Connect framework. 
+* **No Third-Party Sharing:** We do **not** share your health data with any third parties outside of Health Connect without your explicit consent. 
+
+**4. Changes to This Privacy Policy**
+
+We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the updated policy on this page and, if appropriate, by sending you a notification within the App. 
+
+**5. Contact Us**
+
+If you have any questions about this Privacy Policy, please contact us at felker.tech+photomeals@gmail.com.
+
+**Important Notes:**
+
+By using our App, you acknowledge that you have read, understood, and agree to this Privacy Policy.
