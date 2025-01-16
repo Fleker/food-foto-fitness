@@ -28,7 +28,21 @@ We use the information we collect for the following purposes:
 **3. Data Sharing**
 
 * **Health Connect:** We share your health data with Health Connect only with your explicit consent and after you have granted the necessary permissions within the Health Connect framework. 
-* **No Third-Party Sharing:** We do **not** share your health data with any third parties outside of Health Connect without your explicit consent. 
+* **No Third-Party Sharing:** We do **not** share your health data with any third parties outside of Health Connect without your explicit consent.
+
+**3.1 Health Connect**
+
+What is Health Connect?
+
+Health Connect is a framework provided by Google that allows health and fitness apps to access and share health data from various sources, such as wearable devices, other health apps, and the device's built-in sensors.
+
+Data Sharing with Health Connect:
+
+We use Health Connect to access the health data you choose to share with the App. You have full control over which data you allow the App to access through Health Connect.
+
+Data Usage:
+
+The data accessed through Health Connect is used within the App to provide the features and functionalities you have selected.
 
 **4. Changes to This Privacy Policy**
 
