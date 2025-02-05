@@ -44,6 +44,28 @@ Data Usage:
 
 The data accessed through Health Connect is used within the App to provide the features and functionalities you have selected.
 
+**3.2 Delete Data**
+Here is the process for deleting data in **Photo Meals**:
+
+All data is stored directly in Health Connect, so we recommend [using that process](https://support.google.com/android/answer/12201232?hl=en) to remove data.
+
+## Delete all Health Connect data
+- On your device, open the Health Connect app .
+- Select Data and access.
+- At the bottom, tap Delete all data.
+- Select a time period.
+- To permanently delete the data, tap Next and then Delete.
+
+**3.3 AI Uploads**
+
+Photos are uploaded to a server-side Large Language Model (Google's Gemini). Please look at [Gemini's Privacy Policy](https://support.google.com/gemini/answer/13594961?hl=en#what_data) for more. We'll embed a key passage below:
+
+> Google collects your Gemini Apps conversations, related product usage information, info about your location, and your feedback. Google uses this data, consistent with our Privacy Policy, to provide, improve, and develop Google products and services and machine-learning technologies, including Google’s enterprise products such as Google Cloud.
+> 
+> Gemini Apps Activity is on by default if you are 18 or older. Users under 18 can choose to turn it on.
+>
+> If your Gemini Apps Activity setting is on, Google stores your Gemini Apps activity with your Google Account for up to 18 months. You can change this to 3 or 36 months in your Gemini Apps Activity setting. Info about your location, including the general area from your device, IP address, or Home or Work addresses in your Google Account, is also stored with your Gemini Apps activity. Learn more at g.co/privacypolicy/location.
+
 **4. Changes to This Privacy Policy**
 
 We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the updated policy on this page and, if appropriate, by sending you a notification within the App. 
